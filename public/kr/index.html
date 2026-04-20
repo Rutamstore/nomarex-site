@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NoMareX — 다음 시장을 만드는 브랜드 하우스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  body { font-family: 'Geist', 'Pretendard Variable', sans-serif; background: #F5F5F5; }
+
+  @keyframes blobFloat1 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-30px,40px) scale(1.1);} }
+  @keyframes blobFloat2 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(30px,-25px) scale(0.92);} }
+  @keyframes blobFloat3 { 0%,100% { transform: translate(0,0);} 50% { transform: translate(-20px,-30px);} }
+  @keyframes blobFloat4 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(40px,20px) scale(1.05);} }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0;} to { transform: translateY(0); opacity: 1;} }
+  @keyframes fadeUp { from { transform: translateY(40px); opacity: 0;} to { transform: translateY(0); opacity: 1;} }
+  @keyframes pillIn { from { transform: translateX(-10px); opacity: 0;} to { transform: translateX(0); opacity: 1;} }
+  @keyframes tickerSlide { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+  @keyframes dotPulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: 0.4; transform: scale(0.85);} }
+  @keyframes phoneFloat { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-14px);} }
+  @keyframes scrollHint { 0%,100% { transform: translateY(0); opacity: 0.6;} 50% { transform: translateY(8px); opacity: 1;} }
+  @keyframes imgFloat { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+
+  .blob1 { animation: blobFloat1 11s ease-in-out infinite; }
+  .blob2 { animation: blobFloat2 13s ease-in-out infinite; }
+  .blob3 { animation: blobFloat3 15s ease-in-out infinite; }
+  .blob4 { animation: blobFloat4 9s ease-in-out infinite; }
+  .line-wrap { overflow: hidden; }
+  .line-up { animation: slideUp 1s cubic-bezier(0.16,1,0.3,1) both; display: inline-block; }
+  .fade-up { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) both; }
+  .pill { animation: pillIn 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+  .ticker { animation: tickerSlide 50s linear infinite; }
+  .dot-p { animation: dotPulse 1.6s ease-in-out infinite; }
+  .phone-f { animation: phoneFloat 5s ease-in-out infinite; }
+  .scroll-hint { animation: scrollHint 2s ease-in-out infinite; }
+  .img-float { animation: imgFloat 6s ease-in-out infinite; }
+
+  .reveal-up { opacity: 0; transform: translateY(60px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-left { opacity: 0; transform: translateX(-80px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-right { opacity: 0; transform: translateX(80px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-up.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: translate(0,0); }
+
+  .d1 { animation-delay: 0.15s; }
+  .d2 { animation-delay: 0.35s; }
+  .d3 { animation-delay: 0.55s; }
+  .d4 { animation-delay: 0.75s; }
+  .d5 { animation-delay: 0.95s; }
+  .d6 { animation-delay: 1.15s; }
+
+  .nx-page {
+    background: #FFFFFF;
+    max-width: 1280px;
+    margin: 0 auto;
+    overflow: visible;
+    font-family: 'Geist', 'Pretendard Variable', sans-serif;
+  }
+  @media (min-width: 1281px) {
+    .nx-page { overflow: hidden; border-radius: 16px; }
+  }
+  .nx-page * { font-family: 'Geist', 'Pretendard Variable', sans-serif; }
+
+  .t-hero { font-size: 72px; font-weight: 700; line-height: 1.0; letter-spacing: -0.035em; }
+  .t-section { font-size: 56px; font-weight: 700; line-height: 1.05; letter-spacing: -0.035em; }
+  .t-sub { font-size: 40px; font-weight: 600; line-height: 1.1; letter-spacing: -0.03em; }
+  .t-quote { font-size: 36px; font-weight: 500; line-height: 1.4; letter-spacing: -0.025em; }
+  .t-card { font-size: 32px; font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; }
+  .t-lead { font-size: 18px; font-weight: 400; line-height: 1.6; color: #555; }
+  .t-body { font-size: 16px; font-weight: 400; line-height: 1.7; color: #555; }
+  .t-label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; }
+
+  .nx-sec-label { font-size: 11px; letter-spacing: 0.2em; color: #999; font-weight: 500; display: inline-block; padding: 6px 12px; background: #FAFAFA; border-radius: 4px; }
+  .nx-section { position: relative; overflow: hidden; }
+
+  /* RUTAM sticky sub-nav */
+  .subnav-rutam {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(253, 248, 242, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(184, 84, 44, 0.15);
+    padding: 14px 24px;
+  }
+  .subnav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 8px;
+    overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .subnav-inner::-webkit-scrollbar { display: none; }
+  .subnav-brand {
+    font-size: 13px; font-weight: 700; color: #8B3D1F;
+    letter-spacing: -0.01em; white-space: nowrap;
+    padding-right: 16px; border-right: 0.5px solid rgba(184, 84, 44, 0.2);
+    margin-right: 8px; flex-shrink: 0;
+  }
+  .subnav-tab {
+    display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px;
+    background: transparent; border: 0.5px solid transparent; border-radius: 999px;
+    font-size: 12px; font-weight: 500; color: #6B4A30;
+    white-space: nowrap; cursor: pointer; text-decoration: none;
+    transition: all 0.3s; min-height: 40px; flex-shrink: 0;
+  }
+  .subnav-tab:hover { background: rgba(184, 84, 44, 0.08); color: #8B3D1F; }
+  .subnav-tab.active {
+    background: #B8542C; color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(184, 84, 44, 0.25);
+  }
+  .subnav-tab .tab-num {
+    font-size: 10px; opacity: 0.6; font-weight: 600; letter-spacing: 0.08em;
+  }
+  .subnav-tab.active .tab-num { opacity: 0.9; }
+
+  .section-anchor { scroll-margin-top: 80px; }
+
+  /* RUTAM card styles */
+  .card-wrapper {
+    position: relative; max-width: 420px; margin: 0 auto; padding-top: 50px;
+  }
+  .big-num {
+    position: absolute; top: 0; font-size: 130px; font-weight: 800;
+    line-height: 0.85; letter-spacing: -0.06em; z-index: 2; pointer-events: none;
+    color: rgba(184, 84, 44, 0.22);
+  }
+  .big-num.left { left: -20px; }
+  .big-num.right { right: -20px; }
+  .rutam-card {
+    position: relative; border-radius: 28px; overflow: hidden;
+    box-shadow: 0 40px 90px rgba(139, 61, 31, 0.18), 0 10px 30px rgba(184, 84, 44, 0.1);
+    aspect-ratio: 4/5; z-index: 1;
+  }
+  .rutam-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rutam-card .fallback {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center; flex-direction: column;
+    color: #FFF; padding: 40px; text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .t-hero { font-size: 44px; }
+    .t-section { font-size: 36px; }
+    .t-sub { font-size: 28px; }
+    .t-quote { font-size: 24px; }
+    .t-card { font-size: 24px; }
+    .subnav-tab .tab-num { display: none; }
+    .img-float, .phone-f, .scroll-hint { animation: none; }
+    .blob1, .blob2, .blob3, .blob4 { opacity: 0.04 !important; }
+
+    /* Stack all 2-column grids vertically on mobile */
+    .nx-section [style*="grid-template-columns: 1fr 1fr"],
+    .nx-section [style*="grid-template-columns: 1fr auto 1fr"],
+    .nx-section [style*="grid-template-columns: 5fr 4fr"],
+    .nx-section [style*="grid-template-columns: 1fr 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 40px !important;
+    }
+
+    .nx-section[style*="padding: 140px 48px 180px"] {
+      padding: 80px 24px 100px !important;
+    }
+
+    .nx-section > div[style*="padding: 0 48px"],
+    .nx-section > div[style*="padding: 160px 48px"],
+    .nx-section > div[style*="padding: 120px 48px"],
+    .nx-section > div[style*="padding: 100px 48px"],
+    .nx-section > div[style*="padding: 90px 48px"],
+    .nx-section > div[style*="padding: 80px 48px"],
+    .nx-section > div[style*="padding: 60px 48px"],
+    .nx-section > div[style*="padding: 40px 48px"] {
+      padding-left: 24px !important;
+      padding-right: 24px !important;
+    }
+
+    .nx-page > div:first-child {
+      padding: 16px 20px !important;
+    }
+    .nx-page > div:first-child > div:last-child {
+      gap: 16px !important;
+      font-size: 12px !important;
+    }
+
+    div[style*="font-size: 200px"] {
+      font-size: 100px !important;
+    }
+    div[style*="font-size: 130px"] {
+      font-size: 80px !important;
+    }
+
+    [style*="max-width: 340px"],
+    [style*="max-width: 320px"] {
+      max-width: 280px !important;
+    }
+
+    .subnav-rutam {
+      position: relative !important;
+      top: auto !important;
+      padding: 10px 16px;
+    }
+    .subnav-brand { font-size: 12px; padding-right: 12px; margin-right: 6px; }
+    .subnav-tab { padding: 8px 12px; font-size: 11px; min-height: 36px; }
+
+    /* CRITICAL: Force overflow:visible to prevent mobile scroll lock */
+    .nx-section, .nx-section > div { overflow: visible !important; }
+
+    .nx-section[id="rutam"] > div[style*="padding: 120px 48px 70px"] {
+      padding: 80px 24px 50px !important;
+    }
+
+    .nx-section[id="contact"] [style*="grid-template-columns: 1fr 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 32px !important;
+    }
+    .nx-section[id="contact"] [style*="border-left: 0.5px solid #1F1F1F"] {
+      border-left: none !important;
+      border-right: none !important;
+      border-top: 0.5px solid #1F1F1F !important;
+      border-bottom: 0.5px solid #1F1F1F !important;
+      padding: 24px 0 !important;
+    }
+
+    .ticker { animation-duration: 35s !important; }
+
+    .big-num { font-size: 80px !important; }
+    .big-num.left { left: 0px !important; }
+    .big-num.right { right: 0px !important; }
+
+    .nx-section[id="contact"] [style*="padding-top: 24px"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="nx-page">
+
+  <!-- NAV -->
+  <div style="padding: 20px 40px; border-bottom: 0.5px solid #EAECEF; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 60;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <svg width="20" height="20" viewBox="0 0 18 18">
+        <circle cx="9" cy="9" r="8" fill="none" stroke="#B8542C" stroke-width="1.5"/>
+        <circle cx="9" cy="9" r="3" fill="#C9A227"/>
+      </svg>
+      <span style="font-size: 17px; font-weight: 700; color: #0A0A0A; letter-spacing: -0.02em;">NoMareX</span>
+    </div>
+    <div style="display: flex; gap: 28px; font-size: 13px; color: #333; font-weight: 500;">
+      <a href="#brands" style="color: #333; text-decoration: none;">브랜드</a>
+      <a href="#founder" style="color: #333; text-decoration: none;">파운더</a>
+      <a href="#contact" style="color: #333; text-decoration: none;">문의</a>
+      <span style="color: #D0D0D0;">|</span>
+      <span style="color: #999;">EN</span><span style="color: #0A0A0A; font-weight: 600;">KR</span>
+    </div>
+  </div>
+
+  <!-- =============== 01. HERO =============== -->
+  <div class="nx-section" style="background: linear-gradient(180deg, #FFFFFF 0%, #FDFBF8 100%); padding: 140px 48px 180px; min-height: 640px;">
+    <div class="blob1" style="position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: #B8542C; border-radius: 50%; opacity: 0.10;"></div>
+    <div class="blob2" style="position: absolute; top: 60px; right: 220px; width: 140px; height: 140px; background: #C9A227; border-radius: 50%; opacity: 0.12;"></div>
+    <div class="blob3" style="position: absolute; bottom: 40px; left: 10%; width: 220px; height: 220px; background: #B8542C; border-radius: 50%; opacity: 0.05;"></div>
+    <div class="blob4" style="position: absolute; top: 200px; left: -60px; width: 180px; height: 180px; background: #C9A227; border-radius: 50%; opacity: 0.06;"></div>
+
+    <div style="position: relative; max-width: 820px;">
+      <div class="t-hero" style="color: #0A0A0A; margin-bottom: 40px;">
+        <div class="line-wrap"><span class="line-up d1">시장을 따라가지 않습니다.</span></div>
+        <div class="line-wrap"><span class="line-up d2" style="background: linear-gradient(120deg,#B8542C,#D4783F 50%,#C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">다음 시장을 만듭니다.</span></div>
+      </div>
+
+      <div class="t-lead fade-up d5" style="max-width: 520px; margin-bottom: 52px;">
+        시장이 다음에 필요로 할 것을 만듭니다 —<br>
+        신념으로 세우고, 트렌드를 넘어서도록 설계합니다.
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; position: relative;">
+        <a class="pill d6" href="#rutam" style="background: #FFFFFF; border: 0.5px solid rgba(184, 84, 44, 0.3); color: #8B3D1F; padding: 13px 24px; border-radius: 999px; font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 16px rgba(184, 84, 44, 0.08);">
+          <span style="display: inline-block; width: 7px; height: 7px; background: #B8542C; border-radius: 50%;"></span>
+          RUTAM by NoMareX
+          <span style="color: #999; font-size: 11px;">→</span>
+        </a>
+        <a class="pill" href="#ml" style="background: #FFFFFF; border: 0.5px solid #E8D89A; color: #8B6F1F; padding: 13px 24px; border-radius: 999px; font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; animation-delay: 1.3s; box-shadow: 0 4px 16px rgba(201,162,39,0.08);">
+          <span style="display: inline-block; width: 7px; height: 7px; background: #C9A227; border-radius: 50%;"></span>
+          MarketLegion.ai
+          <span style="color: #999; font-size: 11px;">→</span>
+        </a>
+      </div>
+
+      <div class="scroll-hint" style="position: absolute; bottom: -100px; left: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+        <span class="t-label" style="color: #999;">SCROLL</span>
+        <div style="width: 1px; height: 30px; background: linear-gradient(180deg, #999, transparent);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============== 02. BRANDS =============== -->
+  <div id="brands" class="nx-section section-anchor" style="background: #FDFBF8; padding: 180px 0 0; overflow: hidden;">
+    <div class="blob2" style="position: absolute; top: 40px; right: 5%; width: 260px; height: 260px; background: #B8542C; border-radius: 50%; opacity: 0.06; filter: blur(40px);"></div>
+    <div class="blob4" style="position: absolute; top: 400px; left: -80px; width: 220px; height: 220px; background: #C9A227; border-radius: 50%; opacity: 0.05; filter: blur(50px);"></div>
+
+    <div style="position: relative; padding: 0 48px; margin-bottom: 120px; max-width: 1080px; margin-left: auto; margin-right: auto;">
+      <span class="nx-sec-label" style="margin-bottom: 40px; display: inline-block;">02 · 브랜드</span>
+      <div class="t-section" style="color: #0A0A0A;">
+        <div>카테고리가 아닌,</div>
+        <div style="background: linear-gradient(120deg, #B8542C, #D4783F 40%, #C9A227 80%); -webkit-background-clip: text; background-clip: text; color: transparent;">신념 위에 세운 포트폴리오.</div>
+      </div>
+      <div class="t-lead" style="margin-top: 32px; max-width: 540px; color: #777;">
+        아직 시장이 완전히 인식하지 못한 필요에 답하는 브랜드를 만듭니다.
+      </div>
+    </div>
+
+    <!-- 카드 2개 -->
+    <div style="position: relative; padding: 0 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1080px; margin-left: auto; margin-right: auto;">
+
+      <!-- RUTAM -->
+      <a href="#rutam" style="text-decoration: none; position: relative; aspect-ratio: 1/1.05; background: linear-gradient(160deg, #FDF8F2 0%, #EDD4B8 60%, #D4A574 100%); border-radius: 28px; padding: 40px; box-shadow: 0 30px 70px rgba(184, 84, 44, 0.2); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+        <div style="position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: rgba(184, 84, 44, 0.2); border-radius: 50%; filter: blur(30px);"></div>
+
+        <div style="position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center;">
+          <div style="width: 10px; height: 10px; background: #B8542C; border-radius: 50%;"></div>
+          <span class="t-label" style="color: #8B3D1F;">● 스칼프 & 헤어</span>
+        </div>
+
+        <div style="position: relative; z-index: 1;">
+          <div class="t-label" style="color: #6B4A30; margin-bottom: 14px;">RUTAM BY NOMAREX</div>
+          <div class="t-card" style="color: #3D2817; font-size: 36px; margin-bottom: 22px;">
+            또 하나의 제품이<br>아닌, 하나의<br>생물학적 시스템.
+          </div>
+          <div class="t-body" style="color: #6B4A30; max-width: 320px; margin-bottom: 32px; font-size: 14px;">
+            두피와 모발의 생태계 회복력을<br>
+            생물학적 설계로 구현합니다.
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <span style="font-size: 13px; color: #8B3D1F; font-weight: 500;">RUTAM 살펴보기 →</span>
+            <div style="font-size: 56px; font-weight: 800; color: rgba(184, 84, 44, 0.4); letter-spacing: -0.05em; line-height: 0.9;">01</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- MarketLegion -->
+      <a href="#ml" style="text-decoration: none; position: relative; aspect-ratio: 1/1.05; background: linear-gradient(160deg, #1A1A1A 0%, #242018 60%, #2E2618 100%); border-radius: 28px; padding: 40px; box-shadow: 0 30px 70px rgba(0,0,0,0.25); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+        <div style="position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: rgba(201,162,39,0.2); border-radius: 50%; filter: blur(30px);"></div>
+
+        <div style="position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center;">
+          <div style="width: 10px; height: 10px; background: #C9A227; border-radius: 50%;"></div>
+          <span class="t-label" style="color: #C9A227;">● AI 기반</span>
+        </div>
+
+        <div style="position: relative; z-index: 1;">
+          <div class="t-label" style="color: #A89867; margin-bottom: 14px;">MARKETLEGION.AI</div>
+          <div class="t-card" style="color: #F5EFE4; font-size: 36px; margin-bottom: 22px;">
+            주머니 속의<br>AI 트레이더.
+          </div>
+          <div class="t-body" style="color: #A89867; max-width: 320px; margin-bottom: 32px; font-size: 14px;">
+            24시간 암호화폐 시장 인텔리전스 —<br>
+            전문가의 시선으로 시장을 읽습니다.
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <span style="font-size: 13px; color: #C9A227; font-weight: 500;">MarketLegion 살펴보기 →</span>
+            <div style="font-size: 56px; font-weight: 800; color: rgba(201,162,39,0.4); letter-spacing: -0.05em; line-height: 0.9;">02</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ticker -->
+    <div style="margin-top: 120px; border-top: 0.5px solid #EAECEF; border-bottom: 0.5px solid #EAECEF; padding: 22px 0; overflow: hidden; white-space: nowrap; background: #FFFFFF;">
+      <div class="ticker" style="display: inline-block; white-space: nowrap; font-size: 13px; color: #999; letter-spacing: 0.02em;">
+        <span style="margin: 0 32px;"><span style="color: #B8542C;">●</span>&nbsp; RUTAM &nbsp;— 두피와 모발의 생태계 회복력</span>
+        <span style="margin: 0 32px;"><span style="color: #C9A227;">●</span>&nbsp; MarketLegion &nbsp;— AI 기반 암호화폐 시장 인텔리전스</span>
+        <span style="margin: 0 32px;"><span style="color: #B8542C;">●</span>&nbsp; rutam.store</span>
+        <span style="margin: 0 32px;"><span style="color: #C9A227;">●</span>&nbsp; marketlegion.ai</span>
+        <span style="margin: 0 32px;"><span style="color: #0A0A0A;">●</span>&nbsp; Curate. Innovate. Scale.</span>
+        <span style="margin: 0 32px;"><span style="color: #B8542C;">●</span>&nbsp; RUTAM &nbsp;— 두피와 모발의 생태계 회복력</span>
+        <span style="margin: 0 32px;"><span style="color: #C9A227;">●</span>&nbsp; MarketLegion &nbsp;— AI 기반 암호화폐 시장 인텔리전스</span>
+        <span style="margin: 0 32px;"><span style="color: #B8542C;">●</span>&nbsp; rutam.store</span>
+        <span style="margin: 0 32px;"><span style="color: #C9A227;">●</span>&nbsp; marketlegion.ai</span>
+        <span style="margin: 0 32px;"><span style="color: #0A0A0A;">●</span>&nbsp; Curate. Innovate. Scale.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============== 03. RUTAM — Terracotta + Sticky Sub-Nav + YouTube =============== -->
+  <div id="rutam" class="nx-section section-anchor" style="background: linear-gradient(180deg, #FDF8F2 0%, #F5E6D3 20%, #EDD4B8 50%, #F5E6D3 80%, #FDF8F2 100%);">
+
+    <nav class="subnav-rutam">
+      <div class="subnav-inner">
+        <div class="subnav-brand">RUTAM</div>
+        <a href="#rutam-philosophy" class="subnav-tab" data-tab="philosophy">
+          <span class="tab-num">01</span>철학
+        </a>
+        <a href="#rutam-system" class="subnav-tab" data-tab="system">
+          <span class="tab-num">02</span>시스템
+        </a>
+        <a href="#rutam-science" class="subnav-tab" data-tab="science">
+          <span class="tab-num">03</span>바이오 사이언스
+        </a>
+        <a href="#rutam-results" class="subnav-tab" data-tab="results">
+          <span class="tab-num">●</span>실제 변화
+        </a>
+      </div>
+    </nav>
+
+    <!-- Section Hero -->
+    <div style="position: relative; padding: 120px 48px 70px; text-align: center;">
+      <div class="blob1" style="position: absolute; top: 40px; right: 10%; width: 380px; height: 380px; background: #B8542C; border-radius: 50%; opacity: 0.1; filter: blur(80px);"></div>
+      <div class="blob2" style="position: absolute; bottom: -100px; left: -50px; width: 280px; height: 280px; background: #C9A227; border-radius: 50%; opacity: 0.1; filter: blur(80px);"></div>
+
+      <div style="position: relative; max-width: 900px; margin: 0 auto;" class="reveal-up">
+        <span class="nx-sec-label" style="background: rgba(255,255,255,0.7); color: #8B3D1F; margin-bottom: 36px;">03 · RUTAM</span>
+        <div class="t-section" style="margin-top: 32px; color: #3D2817;">
+          <div>제품이</div>
+          <div style="color: rgba(61, 40, 23, 0.3); margin-top: 4px;">아닙니다.</div>
+          <div style="margin-top: 8px; background: linear-gradient(120deg, #8B3D1F, #B8542C 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">하나의 시스템입니다.</div>
+        </div>
+        <div class="t-lead" style="margin-top: 36px; max-width: 540px; margin-left: auto; margin-right: auto; color: #6B4A30;">
+          두피와 모발의 생태계 회복력 —<br>
+          생물학적 설계로 구현합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Block 1: Philosophy -->
+    <div id="rutam-philosophy" style="padding: 90px 48px; position: relative;" class="section-anchor">
+      <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+        <div class="reveal-left">
+          <div class="card-wrapper">
+            <div class="big-num left">01</div>
+            <div class="rutam-card img-float">
+              <img src="/images/rutam/01-philosophy-model.jpg" alt="RUTAM Philosophy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <div class="fallback" style="display:none; background: linear-gradient(160deg, #E8C4A8, #C98A5A 60%, #8B3D1F);">
+                <div style="font-size: 12px; letter-spacing: 0.2em; opacity: 0.85; margin-bottom: 16px;">● PHILOSOPHY</div>
+                <div style="font-size: 24px; font-weight: 600;">The Scalp<br>Is A System.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #8B3D1F; padding: 6px 14px; background: rgba(184, 84, 44, 0.08); border: 0.5px solid rgba(184, 84, 44, 0.2); border-radius: 999px; margin-bottom: 28px;">● 01 · 철학</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #3D2817; margin-bottom: 28px;">
+            두피는 표면이<br>아닙니다.<br>
+            <em style="font-style: normal; background: linear-gradient(120deg, #8B3D1F, #B8542C 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">하나의 생태계입니다.</em>
+          </div>
+          <div style="font-size: 15px; line-height: 1.75; color: #6B4A30; max-width: 420px;">
+            RUTAM은 단순한 확신에서 출발합니다 — 두피는 살아있는 생태계이지, 덮어씌우는 표면이 아닙니다. 모든 포뮬레이션은 증상이 아닌 환경에서 시작됩니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 48px;">
+      <div style="height: 0.5px; background: linear-gradient(90deg, transparent, rgba(184, 84, 44, 0.25), transparent);"></div>
+    </div>
+
+    <!-- Block 2: System -->
+    <div id="rutam-system" style="padding: 90px 48px; position: relative;" class="section-anchor">
+      <div class="blob1" style="position: absolute; top: 100px; left: 8%; width: 320px; height: 320px; background: #C9A227; border-radius: 50%; opacity: 0.06; filter: blur(80px);"></div>
+      <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+        <div class="reveal-left">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #8B3D1F; padding: 6px 14px; background: rgba(184, 84, 44, 0.08); border: 0.5px solid rgba(184, 84, 44, 0.2); border-radius: 999px; margin-bottom: 28px;">● 02 · 시스템</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #3D2817; margin-bottom: 28px;">
+            증상을 가리지<br>않습니다.<br>
+            <em style="font-style: normal; background: linear-gradient(120deg, #8B3D1F, #B8542C 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">두피의 활력을 돕습니다.</em>
+          </div>
+          <div style="font-size: 15px; line-height: 1.75; color: #6B4A30; max-width: 420px; margin-bottom: 36px;">
+            세 단계, 하나의 생물학적 논리. Mist가 준비하고, Serum Nº8이 활성화하고, Shield가 보호합니다 — 두피의 활력을 내면에서부터 회복시키는 루틴입니다.
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div style="padding: 10px 18px; background: #FFFFFF; border: 0.5px solid rgba(184, 84, 44, 0.25); border-radius: 999px; font-size: 12px; color: #8B3D1F; font-weight: 600;">01 · MIST</div>
+            <div style="padding: 10px 18px; background: #FFFFFF; border: 0.5px solid rgba(184, 84, 44, 0.25); border-radius: 999px; font-size: 12px; color: #8B3D1F; font-weight: 600;">02 · SERUM Nº8</div>
+            <div style="padding: 10px 18px; background: #FFFFFF; border: 0.5px solid rgba(184, 84, 44, 0.25); border-radius: 999px; font-size: 12px; color: #8B3D1F; font-weight: 600;">03 · SHIELD</div>
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <div class="card-wrapper">
+            <div class="big-num right">02</div>
+            <div class="rutam-card img-float" style="animation-delay: 1.5s;">
+              <img src="/images/rutam/02-system-3products.png" alt="RUTAM System" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <div class="fallback" style="display:none; background: linear-gradient(160deg, #D4A574, #B8542C 60%, #8B3D1F);">
+                <div style="font-size: 12px; letter-spacing: 0.2em; opacity: 0.85; margin-bottom: 16px;">● THE RITUAL</div>
+                <div style="font-size: 24px; font-weight: 600;">Mist · Serum · Shield</div>
+                <div style="font-size: 11px; letter-spacing: 0.15em; margin-top: 12px; opacity: 0.8;">DESIGNED IN McLEAN, VA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 48px;">
+      <div style="height: 0.5px; background: linear-gradient(90deg, transparent, rgba(184, 84, 44, 0.25), transparent);"></div>
+    </div>
+
+    <!-- Block 3: Bio-Science -->
+    <div id="rutam-science" style="padding: 90px 48px; position: relative;" class="section-anchor">
+      <div class="blob2" style="position: absolute; bottom: 60px; right: 8%; width: 360px; height: 360px; background: #C9A227; border-radius: 50%; opacity: 0.08; filter: blur(80px);"></div>
+      <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+        <div class="reveal-left">
+          <div class="card-wrapper">
+            <div class="big-num left">03</div>
+            <div class="rutam-card img-float" style="animation-delay: 3s;">
+              <img src="/images/rutam/03-science-exosome.png" alt="RUTAM Bio-Science" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <div class="fallback" style="display:none; background: linear-gradient(160deg, #F5E6D3, #D4A574 60%, #B8542C);">
+                <div style="font-size: 12px; letter-spacing: 0.2em; opacity: 0.9; margin-bottom: 16px;">● BIO-SCIENCE</div>
+                <div style="font-size: 24px; font-weight: 600;">Molecular<br>Alignment</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #8B3D1F; padding: 6px 14px; background: rgba(184, 84, 44, 0.08); border: 0.5px solid rgba(184, 84, 44, 0.2); border-radius: 999px; margin-bottom: 28px;">● 03 · 바이오 사이언스</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #3D2817; margin-bottom: 28px;">
+            화장품의 개입이<br>아닙니다.<br>
+            <em style="font-style: normal; background: linear-gradient(120deg, #8B3D1F, #B8542C 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">생물학적 조화입니다.</em>
+          </div>
+          <div style="font-size: 15px; line-height: 1.75; color: #6B4A30; max-width: 420px;">
+            RUTAM은 화장품 배합이 아닌, 바이오 사이언스 원리로 설계됩니다. 각각의 활성 분자는 두피 자체의 조절 시스템을 거스르지 않고, 공명하도록 선별됩니다.
+          </div>
+
+          <div style="margin-top: 36px; padding: 20px 24px; background: rgba(255,255,255,0.7); border: 0.5px solid rgba(184, 84, 44, 0.15); border-radius: 16px; backdrop-filter: blur(8px);">
+            <div style="font-size: 11px; color: #8B3D1F; letter-spacing: 0.16em; font-weight: 600; margin-bottom: 10px;">● DESIGNED IN McLEAN, VIRGINIA</div>
+            <div style="font-size: 13px; color: #6B4A30; line-height: 1.6;">
+              생태계 수준의 회복력을 생물학적으로 설계합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real Results (YouTube) -->
+    <div id="rutam-results" class="reveal-up section-anchor" style="padding: 60px 48px 80px;">
+      <div style="max-width: 900px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 40px;">
+          <span class="nx-sec-label" style="background: rgba(255,255,255,0.7); color: #8B3D1F;">● 실제 변화</span>
+          <div style="font-size: 40px; font-weight: 700; color: #3D2817; letter-spacing: -0.03em; margin-top: 20px; line-height: 1.1;">
+            결과가<br>
+            <span style="background: linear-gradient(120deg, #8B3D1F, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">스스로 말합니다.</span>
+          </div>
+        </div>
+        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 24px; box-shadow: 0 30px 80px rgba(61, 40, 23, 0.25);">
+          <iframe src="https://www.youtube.com/embed/db-lSiRlC00?rel=0&modestbranding=1" title="RUTAM Brand Film" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="padding: 40px 48px 120px; text-align: center;">
+      <a href="https://rutam.store" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 14px; background: #3D2817; color: #FFF; padding: 20px 40px; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none; box-shadow: 0 20px 50px rgba(61, 40, 23, 0.25); letter-spacing: -0.01em;">
+        rutam.store에서 RUTAM 만나보기
+        <span style="font-size: 18px;">→</span>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- =============== 04. MARKETLEGION — v8 zigzag with 3 Drive images =============== -->
+  <div id="ml" class="nx-section section-anchor" style="background: linear-gradient(180deg, #0F0C08 0%, #1A1510 50%, #0F0C08 100%); padding: 0; color: #F5EFE4;">
+
+    <!-- 섹션 헤더 -->
+    <div style="position: relative; padding: 140px 48px 80px; text-align: center;">
+      <div class="blob1" style="position: absolute; top: 60px; right: 10%; width: 380px; height: 380px; background: #C9A227; border-radius: 50%; opacity: 0.08; filter: blur(80px);"></div>
+      <div class="blob2" style="position: absolute; bottom: -100px; left: -50px; width: 280px; height: 280px; background: #F0C65A; border-radius: 50%; opacity: 0.06; filter: blur(80px);"></div>
+
+      <div style="position: relative; max-width: 900px; margin: 0 auto;" class="reveal-up">
+        <span class="nx-sec-label" style="background: rgba(240,198,90,0.12); color: #F0C65A; margin-bottom: 36px;">04 · MARKETLEGION</span>
+        <div class="t-section" style="margin-top: 36px; color: #F5EFE4;">
+          <div>주머니 속</div>
+          <div style="color: rgba(245,239,228,0.3); margin-top: 6px;">트레이딩 데스크.</div>
+          <div style="margin-top: 10px; background: linear-gradient(120deg, #F0C65A, #E5C158 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">모두를 위한.</div>
+        </div>
+        <div class="t-lead" style="margin-top: 36px; max-width: 540px; margin-left: auto; margin-right: auto; color: #B8A87A; text-align: center;">
+          24시간 AI 기반 시장 인텔리전스 —<br>
+          의미 있는 신호만 전달합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 지그재그 블록 1: 이미지 왼쪽 / 글 오른쪽 (Feed) -->
+    <div style="padding: 100px 48px; position: relative;">
+      <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+
+        <!-- 왼쪽: Feed 이미지 -->
+        <div class="reveal-left phone-f" style="position: relative;">
+          <div style="position: absolute; top: -40px; left: -40px; font-size: 200px; font-weight: 800; line-height: 0.8; color: rgba(240,198,90,0.08); letter-spacing: -0.06em; z-index: 0;">01</div>
+          <div style="position: relative; max-width: 320px; margin: 0 auto; z-index: 1; background: linear-gradient(180deg, #1A1510, #0F0C08); border: 1px solid rgba(240,198,90,0.15); border-radius: 40px; padding: 14px; box-shadow: 0 60px 120px rgba(240,198,90,0.12), 0 20px 60px rgba(0,0,0,0.4);">
+            <img src="https://drive.google.com/thumbnail?id=1O_Oxi4mD2zE5IJ-DmpPxhcHF6kGbrXNK&sz=w1000" alt="MarketLegion Feed" style="width: 100%; display: block; border-radius: 28px; background: #0F0C08;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+            <div style="display: none; padding: 60px 24px; text-align: center; background: #0F0C08; border-radius: 28px; min-height: 560px;">
+              <div style="font-size: 11px; letter-spacing: 0.2em; color: #F0C65A; font-weight: 700; margin-bottom: 12px;">MARKETLEGION</div>
+              <div style="font-size: 10px; color: #8A7D5F; margin-bottom: 32px;">AI-powered market intelligence</div>
+              <div style="background: rgba(240,198,90,0.08); border-radius: 12px; padding: 16px; margin-bottom: 12px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="font-size: 13px; color: #F5EFE4; font-weight: 700;">BTC</span><span style="font-size: 10px; color: #4ADE80;">↑ Bullish 82.5</span></div>
+                <div style="font-size: 10px; color: #8A7D5F;">Reversal signal CH1 · 3m ago</div>
+              </div>
+              <div style="background: rgba(240,198,90,0.08); border-radius: 12px; padding: 16px; margin-bottom: 12px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="font-size: 13px; color: #F5EFE4; font-weight: 700;">ETH</span><span style="font-size: 10px; color: #F87171;">↓ Bearish 61.2</span></div>
+                <div style="font-size: 10px; color: #8A7D5F;">Trend signal CH3 · just now</div>
+              </div>
+              <div style="background: rgba(240,198,90,0.08); border-radius: 12px; padding: 16px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="font-size: 13px; color: #F5EFE4; font-weight: 700;">SOL</span><span style="font-size: 10px; color: #4ADE80;">↑ Bullish 74.8</span></div>
+                <div style="font-size: 10px; color: #8A7D5F;">Breakout CH2 · just now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 글 -->
+        <div class="reveal-right">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #C9A227; padding: 6px 12px; background: rgba(201,162,39,0.1); border: 0.5px solid rgba(201,162,39,0.25); border-radius: 999px; margin-bottom: 24px;">● 무엇을 하나</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #F5EFE4; margin-bottom: 24px;">
+            소음은 걸러내고,<br>
+            <span style="background: linear-gradient(120deg, #F0C65A, #E5C158 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">신호만 전달합니다.</span>
+          </div>
+          <div style="font-size: 15px; line-height: 1.8; color: #8A7D5F; max-width: 420px;">
+            수천 개의 데이터와 뉴스, 가격 변동을 AI가 대신 읽고 걸러냅니다. 당신에게 도착하는 것은 오직 행동해야 할 신호뿐입니다.
+          </div>
+          <div style="display: flex; gap: 24px; margin-top: 40px; padding-top: 28px; border-top: 0.5px solid rgba(240,198,90,0.15);">
+            <div>
+              <div style="font-size: 28px; font-weight: 700; color: #F0C65A; letter-spacing: -0.02em;">10</div>
+              <div style="font-size: 11px; color: #8A7D5F; letter-spacing: 0.12em; margin-top: 4px;">종목 모니터링</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: 700; color: #F0C65A; letter-spacing: -0.02em;">4</div>
+              <div style="font-size: 11px; color: #8A7D5F; letter-spacing: 0.12em; margin-top: 4px;">신호 타입</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: 700; color: #F0C65A; letter-spacing: -0.02em;">24/7</div>
+              <div style="font-size: 11px; color: #8A7D5F; letter-spacing: 0.12em; margin-top: 4px;">실시간</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 구분선 -->
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 48px;">
+      <div style="height: 0.5px; background: linear-gradient(90deg, transparent, rgba(240,198,90,0.2), transparent);"></div>
+    </div>
+
+    <!-- 지그재그 블록 2: 글 왼쪽 / 이미지 오른쪽 (Summary) -->
+    <div style="padding: 100px 48px; position: relative;">
+      <div class="blob1" style="position: absolute; top: 100px; left: 10%; width: 320px; height: 320px; background: #F0C65A; border-radius: 50%; opacity: 0.06; filter: blur(80px);"></div>
+
+      <div style="position: relative; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+
+        <!-- 왼쪽: 글 -->
+        <div class="reveal-left">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #C9A227; padding: 6px 12px; background: rgba(201,162,39,0.1); border: 0.5px solid rgba(201,162,39,0.25); border-radius: 999px; margin-bottom: 24px;">● 어떻게 작동하나</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #F5EFE4; margin-bottom: 24px;">
+            24시간 시장 인텔리전스.<br>
+            <span style="background: linear-gradient(120deg, #F0C65A, #E5C158 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">당신이 일상을 사는 동안.</span>
+          </div>
+          <div style="font-size: 15px; line-height: 1.8; color: #8A7D5F; max-width: 420px;">
+            하루 세 번, AI가 시장을 정리합니다 — 어떤 종목이 움직였는지, 왜 움직였는지, 다음에 무엇을 봐야 하는지. 전문 애널리스트의 시선으로 요약해서 전달합니다.
+          </div>
+          <div style="display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap;">
+            <div style="padding: 10px 18px; background: rgba(240,198,90,0.08); border: 0.5px solid rgba(240,198,90,0.2); border-radius: 999px; font-size: 12px; color: #E5C158; font-weight: 500;">아침 9시</div>
+            <div style="padding: 10px 18px; background: rgba(240,198,90,0.08); border: 0.5px solid rgba(240,198,90,0.2); border-radius: 999px; font-size: 12px; color: #E5C158; font-weight: 500;">오후 3시</div>
+            <div style="padding: 10px 18px; background: rgba(240,198,90,0.08); border: 0.5px solid rgba(240,198,90,0.2); border-radius: 999px; font-size: 12px; color: #E5C158; font-weight: 500;">저녁 9시</div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: Summary 이미지 -->
+        <div class="reveal-right phone-f" style="position: relative; animation-delay: 1.5s;">
+          <div style="position: absolute; top: -40px; right: -40px; font-size: 200px; font-weight: 800; line-height: 0.8; color: rgba(240,198,90,0.08); letter-spacing: -0.06em; z-index: 0;">02</div>
+          <div style="position: relative; max-width: 320px; margin: 0 auto; z-index: 1; background: linear-gradient(180deg, #1A1510, #0F0C08); border: 1px solid rgba(240,198,90,0.15); border-radius: 40px; padding: 14px; box-shadow: 0 60px 120px rgba(240,198,90,0.12), 0 20px 60px rgba(0,0,0,0.4);">
+            <img src="https://drive.google.com/thumbnail?id=1XqWquzhT7AQ6hGW1eSj1pUzQgArA-jhM&sz=w1000" alt="MarketLegion Summary" style="width: 100%; display: block; border-radius: 28px; background: #0F0C08;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+            <div style="display: none; padding: 60px 24px; text-align: center; background: #0F0C08; border-radius: 28px; min-height: 560px;">
+              <div style="font-size: 11px; letter-spacing: 0.2em; color: #F0C65A; font-weight: 700; margin-bottom: 6px;">MARKETLEGION</div>
+              <div style="font-size: 10px; color: #8A7D5F; margin-bottom: 24px;">AI-curated market overview</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px;">
+                <div style="background: rgba(240,198,90,0.1); border-radius: 12px; padding: 14px 6px;">
+                  <div style="font-size: 9px; color: #8A7D5F; letter-spacing: 0.1em; margin-bottom: 4px;">TOTAL</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #F0C65A;">7</div>
+                </div>
+                <div style="background: rgba(34,197,94,0.08); border-radius: 12px; padding: 14px 6px;">
+                  <div style="font-size: 9px; color: #4ADE80; letter-spacing: 0.1em; margin-bottom: 4px;">BULLISH</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #4ADE80;">5</div>
+                </div>
+                <div style="background: rgba(239,68,68,0.08); border-radius: 12px; padding: 14px 6px;">
+                  <div style="font-size: 9px; color: #F87171; letter-spacing: 0.1em; margin-bottom: 4px;">BEARISH</div>
+                  <div style="font-size: 24px; font-weight: 700; color: #F87171;">2</div>
+                </div>
+              </div>
+              <div style="background: rgba(240,198,90,0.06); border-radius: 12px; padding: 14px; text-align: left;">
+                <div style="font-size: 9px; color: #F0C65A; letter-spacing: 0.14em; margin-bottom: 6px; font-weight: 600;">● AFTERNOON DIGEST</div>
+                <div style="font-size: 11px; color: #B8A87A; line-height: 1.6;">ETH reflected downward pressure during afternoon. XRP boundary expansion aligned with regulatory catalyst.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 구분선 -->
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 48px;">
+      <div style="height: 0.5px; background: linear-gradient(90deg, transparent, rgba(240,198,90,0.2), transparent);"></div>
+    </div>
+
+    <!-- 지그재그 블록 3: 이미지 왼쪽 / 글 오른쪽 (News) -->
+    <div style="padding: 100px 48px 140px; position: relative;">
+      <div class="blob2" style="position: absolute; bottom: 100px; right: 10%; width: 360px; height: 360px; background: #C9A227; border-radius: 50%; opacity: 0.08; filter: blur(80px);"></div>
+
+      <div style="position: relative; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;">
+
+        <!-- 왼쪽: News 이미지 -->
+        <div class="reveal-left phone-f" style="position: relative; animation-delay: 3s;">
+          <div style="position: absolute; top: -40px; left: -40px; font-size: 200px; font-weight: 800; line-height: 0.8; color: rgba(240,198,90,0.08); letter-spacing: -0.06em; z-index: 0;">03</div>
+          <div style="position: relative; max-width: 320px; margin: 0 auto; z-index: 1; background: linear-gradient(180deg, #1A1510, #0F0C08); border: 1px solid rgba(240,198,90,0.15); border-radius: 40px; padding: 14px; box-shadow: 0 60px 120px rgba(240,198,90,0.12), 0 20px 60px rgba(0,0,0,0.4);">
+            <img src="https://drive.google.com/thumbnail?id=1DWp5NPagD3j9Wx82plww9cf5KiXr04c_&sz=w1000" alt="MarketLegion News" style="width: 100%; display: block; border-radius: 28px; background: #0F0C08;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+            <div style="display: none; padding: 60px 24px; text-align: center; background: #0F0C08; border-radius: 28px; min-height: 560px;">
+              <div style="font-size: 11px; letter-spacing: 0.2em; color: #F0C65A; font-weight: 700; margin-bottom: 6px;">MARKETLEGION</div>
+              <div style="font-size: 10px; color: #8A7D5F; margin-bottom: 24px;">News & On-chain</div>
+              <div style="background: rgba(240,198,90,0.06); border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                  <span style="font-size: 10px; color: #F0C65A; font-weight: 700;">BTC Breaking</span>
+                  <span style="font-size: 10px; color: #8A7D5F;">14:32</span>
+                </div>
+                <div style="font-size: 11px; color: #F5EFE4; line-height: 1.5;">BlackRock iShares BTC ETF records largest single-day net inflow since January</div>
+                <div style="font-size: 9px; color: #8A7D5F; margin-top: 6px;">Source: Reuters</div>
+              </div>
+              <div style="background: rgba(240,198,90,0.06); border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                  <span style="font-size: 10px; color: #F0C65A; font-weight: 700;">ETH</span>
+                  <span style="font-size: 10px; color: #8A7D5F;">13:18</span>
+                </div>
+                <div style="font-size: 11px; color: #F5EFE4; line-height: 1.5;">SEC postpones Ethereum spot ETF decision — market uncertainty rises</div>
+                <div style="font-size: 9px; color: #8A7D5F; margin-top: 6px;">Source: Bloomberg</div>
+              </div>
+              <div style="background: rgba(240,198,90,0.06); border-radius: 12px; padding: 14px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                  <span style="font-size: 10px; color: #F0C65A; font-weight: 700;">XRP Breaking</span>
+                  <span style="font-size: 10px; color: #8A7D5F;">11:20</span>
+                </div>
+                <div style="font-size: 11px; color: #F5EFE4; line-height: 1.5;">Ripple reaches final settlement with SEC — XRP surges 18%</div>
+                <div style="font-size: 9px; color: #8A7D5F; margin-top: 6px;">Source: CoinDesk</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 글 -->
+        <div class="reveal-right">
+          <div style="display: inline-block; font-size: 11px; letter-spacing: 0.22em; font-weight: 600; color: #C9A227; padding: 6px 12px; background: rgba(201,162,39,0.1); border: 0.5px solid rgba(201,162,39,0.25); border-radius: 999px; margin-bottom: 24px;">● 왜 중요한가</div>
+          <div style="font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #F5EFE4; margin-bottom: 24px;">
+            또 하나의 차트가 아닌,<br>
+            <span style="background: linear-gradient(120deg, #F0C65A, #E5C158 50%, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">행동할 수 있는 판단.</span>
+          </div>
+          <div style="font-size: 15px; line-height: 1.8; color: #8A7D5F; max-width: 420px;">
+            가격 차트만으로는 보이지 않는 맥락이 있습니다. 주요 뉴스와 거래소 플로우를 실시간으로 엮어, 지금 시장이 왜 움직이는지 알려드립니다.
+          </div>
+          <div style="margin-top: 40px; padding: 20px 24px; background: rgba(240,198,90,0.05); border: 0.5px solid rgba(240,198,90,0.15); border-radius: 16px;">
+            <div style="font-size: 11px; color: #C9A227; letter-spacing: 0.16em; font-weight: 600; margin-bottom: 10px;">실시간 거래소 플로우</div>
+            <div style="display: flex; gap: 24px;">
+              <div>
+                <div style="font-size: 10px; color: #8A7D5F; margin-bottom: 4px;">BTC 순유입</div>
+                <div style="font-size: 18px; font-weight: 700; color: #4ADE80;">+$148M</div>
+              </div>
+              <div style="width: 0.5px; background: rgba(240,198,90,0.15);"></div>
+              <div>
+                <div style="font-size: 10px; color: #8A7D5F; margin-bottom: 4px;">ETH 순유출</div>
+                <div style="font-size: 18px; font-weight: 700; color: #F87171;">−$56M</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="padding: 0 48px 140px; text-align: center;">
+      <a href="https://marketlegion.ai" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 14px; background: linear-gradient(120deg, #F0C65A, #C9A227); color: #0F0C08; padding: 20px 40px; border-radius: 999px; font-size: 15px; font-weight: 600; text-decoration: none; box-shadow: 0 20px 50px rgba(240,198,90,0.3); letter-spacing: -0.01em;">
+        marketlegion.ai에서 만나보기
+        <span style="font-size: 18px;">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- =============== 05. FOUNDER =============== -->
+  <div id="founder" class="nx-section section-anchor" style="background: linear-gradient(180deg, #1A1510 0%, #FFFFFF 10%); padding: 200px 48px 180px;">
+    <div class="blob3" style="position: absolute; top: 240px; right: 15%; width: 260px; height: 260px; background: #B8542C; border-radius: 50%; opacity: 0.05; filter: blur(60px);"></div>
+    <div class="blob4" style="position: absolute; bottom: 200px; left: 10%; width: 200px; height: 200px; background: #C9A227; border-radius: 50%; opacity: 0.06; filter: blur(50px);"></div>
+
+    <div style="position: relative; max-width: 820px; margin: 0 auto; text-align: center;">
+      <span class="nx-sec-label" style="margin-bottom: 56px;">05 · 파운더</span>
+
+      <!-- Large pull quote -->
+      <div class="t-quote" style="color: #0A0A0A; margin-bottom: 72px; font-weight: 500;">
+        세상은 더 많은 제품이 아닌,<br>
+        <span style="background: linear-gradient(120deg, #B8542C, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 600;">의미와 진정성, 목적</span>을 가진<br>브랜드를 필요로 합니다.
+      </div>
+
+      <!-- Body -->
+      <div style="max-width: 600px; margin: 0 auto; text-align: left;">
+        <div style="font-size: 17px; line-height: 1.85; color: #333; margin-bottom: 28px;">
+          모든 결정은 장기적 가치를 기준으로 합니다.<br>
+          효과를 편의와 바꾸지 않고, 진정성을 기교로 대체하지 않습니다.
+        </div>
+        <div style="font-size: 17px; line-height: 1.85; color: #333; margin-bottom: 28px;">
+          진짜 혁신은 파괴가 아닌 <span style="color: #0A0A0A; font-weight: 600;">정밀함</span>에 있습니다 —<br>
+          조용히 자라나는 시장에서 실재하는 필요를 찾아내는 것.
+        </div>
+        <div style="font-size: 17px; line-height: 1.85; color: #333; margin-bottom: 72px;">
+          우리의 브랜드는 마케팅이 아닌 본질로 자리를 얻습니다.<br>
+          하나하나가 과학과 자연, 그리고 글로벌 성장의 철학으로 연결됩니다.
+        </div>
+      </div>
+
+      <!-- Signature -->
+      <div style="display: inline-flex; align-items: center; gap: 18px; padding: 20px 32px; background: #FAFAFA; border-radius: 999px;">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #B8542C, #C9A227); display: flex; align-items: center; justify-content: center; color: #FFF; font-weight: 700; font-size: 13px; box-shadow: 0 6px 16px rgba(184, 84, 44, 0.2);">AK</div>
+        <div style="text-align: left;">
+          <div style="font-size: 14px; font-weight: 600; color: #0A0A0A; letter-spacing: -0.01em;">Abrianna Kim</div>
+          <div style="font-size: 11px; color: #777; letter-spacing: 0.08em;">Founder & CEO, NoMareX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============== 06. CONTACT =============== -->
+  <div id="contact" class="nx-section section-anchor" style="background: linear-gradient(180deg, #FFFFFF 0%, #0A0A0A 18%); padding: 160px 48px 50px; color: #F5F5F5;">
+    <div class="blob1" style="position: absolute; top: 200px; right: 10%; width: 260px; height: 260px; background: #B8542C; border-radius: 50%; opacity: 0.06; filter: blur(60px);"></div>
+
+    <div style="position: relative; max-width: 860px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 100px;">
+        <span class="nx-sec-label" style="background: rgba(255,255,255,0.06); color: #B8542C; margin-bottom: 40px;">06 · 문의</span>
+        <div style="font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -0.035em; color: #FFF; margin-bottom: 24px;">
+          좋은 대화는<br><span style="background: linear-gradient(120deg, #B8542C, #C9A227); -webkit-background-clip: text; background-clip: text; color: transparent;">여기서 시작됩니다.</span>
+        </div>
+        <div style="font-size: 17px; color: #999; line-height: 1.65; max-width: 500px; margin: 0 auto;">
+          브랜드 파트너십, 콜라보레이션, 미디어 문의.<br>
+          의미 있는 대화는 언제든 환영합니다.
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; padding: 48px 0; border-top: 0.5px solid #1F1F1F; border-bottom: 0.5px solid #1F1F1F; margin-bottom: 40px;">
+        <div style="text-align: center;">
+          <div class="t-label" style="color: #777; margin-bottom: 14px;">이메일</div>
+          <a href="mailto:contact@nomarex.com" style="font-size: 16px; color: #B8542C; font-weight: 500; text-decoration: none;">contact@nomarex.com</a>
+        </div>
+        <div style="text-align: center; border-left: 0.5px solid #1F1F1F; border-right: 0.5px solid #1F1F1F;">
+          <div class="t-label" style="color: #777; margin-bottom: 14px;">전화</div>
+          <a href="tel:+17038315553" style="font-size: 16px; color: #F5F5F5; font-weight: 500; text-decoration: none;">+1 (703) 831-5553</a>
+        </div>
+        <div style="text-align: center;">
+          <div class="t-label" style="color: #777; margin-bottom: 14px;">주소</div>
+          <div style="font-size: 13px; color: #999; line-height: 1.7;">7918 Jones Branch Drive<br>Tysons, VA 22102, USA</div>
+          <div style="font-size: 10px; color: #666; margin-top: 8px; letter-spacing: 0.08em;">NoMareX Holdings LLC · Texas, USA</div>
+        </div>
+      </div>
+
+      <!-- FOOTER with Texas LLC -->
+      <div style="padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <svg width="16" height="16" viewBox="0 0 18 18">
+            <circle cx="9" cy="9" r="8" fill="none" stroke="#B8542C" stroke-width="1.5"/>
+            <circle cx="9" cy="9" r="3" fill="#C9A227"/>
+          </svg>
+          <span style="font-size: 13px; color: #999; font-weight: 500;">NoMareX</span>
+          <span style="font-size: 10px; color: #555; margin-left: 12px; letter-spacing: 0.02em;">© 2026 NoMareX Holdings LLC · A Texas Limited Liability Company · All rights reserved.</span>
+        </div>
+        <div style="display: flex; gap: 20px; font-size: 11px; color: #777;">
+          <span>Terms</span>
+          <span>Privacy</span>
+          <a href="https://rutam.store" target="_blank" rel="noopener" style="color: #B8542C; text-decoration: none;">rutam.store →</a>
+          <a href="https://marketlegion.ai" target="_blank" rel="noopener" style="color: #C9A227; text-decoration: none;">marketlegion.ai →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    // Reveal on scroll
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+    document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // RUTAM sticky sub-nav active tab
+    const sections = {
+      'philosophy': document.getElementById('rutam-philosophy'),
+      'system': document.getElementById('rutam-system'),
+      'science': document.getElementById('rutam-science'),
+      'results': document.getElementById('rutam-results')
+    };
+    const tabs = document.querySelectorAll('.subnav-tab');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id.replace('rutam-', '');
+          tabs.forEach(t => {
+            if (t.dataset.tab === id) {
+              t.classList.add('active');
+              if (window.innerWidth <= 768) {
+                t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+              }
+            } else {
+              t.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    Object.values(sections).forEach(s => { if (s) sectionObserver.observe(s); });
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#' || !href) return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
