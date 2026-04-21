@@ -11,8 +11,19 @@
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-  body { font-family: 'Geist', 'Pretendard Variable', sans-serif; background: #F5F5F5; }
+  html, body {
+    width: 100%;
+    overflow-x: clip;
+    -webkit-overflow-scrolling: touch;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Geist', 'Pretendard Variable', sans-serif;
+    background: #F5F5F5;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
+    -webkit-tap-highlight-color: transparent;
+  }
 
   @keyframes blobFloat1 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-30px,40px) scale(1.1);} }
   @keyframes blobFloat2 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(30px,-25px) scale(0.92);} }
@@ -75,7 +86,8 @@
   .t-label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; }
 
   .nx-sec-label { font-size: 11px; letter-spacing: 0.2em; color: #999; font-weight: 500; display: inline-block; padding: 6px 12px; background: #FAFAFA; border-radius: 4px; }
-  .nx-section { position: relative; overflow: hidden; }
+  /* overflow-x:clip prevents horizontal bleed without creating a vertical scroll container */
+  .nx-section { position: relative; overflow-x: clip; overflow-y: visible; }
 
   /* RUTAM sticky sub-nav */
   .subnav-rutam {
@@ -205,7 +217,17 @@
     .subnav-tab { padding: 8px 12px; font-size: 11px; min-height: 36px; }
 
     /* CRITICAL: Force overflow:visible to prevent mobile scroll lock */
-    .nx-section, .nx-section > div { overflow: visible !important; }
+    /* Mobile scroll lock fix — overflow-x:clip contains bleed without trapping scroll momentum */
+    .nx-section { overflow-x: clip !important; overflow-y: visible !important; }
+
+    /* Disable heavy backdrop-filter on sticky top nav for mobile to avoid scroll jank */
+    .nx-page > div:first-child {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(255,255,255,0.96) !important;
+    }
+
+    .reveal-up, .reveal-left, .reveal-right { will-change: auto; }
 
     .nx-section[id="rutam"] > div[style*="padding: 120px 48px 70px"] {
       padding: 80px 24px 50px !important;
@@ -883,6 +905,15 @@
 
 <script>
   (function() {
+    // Mobile scroll detection — suspend non-critical scroll-reactive work during active scroll
+    let isScrolling = false;
+    let scrollTimer = null;
+    window.addEventListener('scroll', () => {
+      isScrolling = true;
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => { isScrolling = false; }, 140);
+    }, { passive: true });
+
     // Reveal on scroll
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -893,7 +924,7 @@
       revealObserver.observe(el);
     });
 
-    // RUTAM sticky sub-nav active tab
+    // RUTAM sub-nav active tab (horizontal scroll of tab strip only — NEVER the page)
     const sections = {
       'philosophy': document.getElementById('rutam-philosophy'),
       'system': document.getElementById('rutam-system'),
@@ -901,6 +932,16 @@
       'results': document.getElementById('rutam-results')
     };
     const tabs = document.querySelectorAll('.subnav-tab');
+    const subnavInner = document.querySelector('.subnav-inner');
+
+    const centerTabInStrip = (tab) => {
+      if (!subnavInner || !tab) return;
+      const stripRect = subnavInner.getBoundingClientRect();
+      const tabRect = tab.getBoundingClientRect();
+      const offset = tabRect.left - stripRect.left
+                   - (stripRect.width / 2) + (tabRect.width / 2);
+      subnavInner.scrollTo({ left: subnavInner.scrollLeft + offset, behavior: 'auto' });
+    };
 
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -909,8 +950,8 @@
           tabs.forEach(t => {
             if (t.dataset.tab === id) {
               t.classList.add('active');
-              if (window.innerWidth <= 768) {
-                t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+              if (window.innerWidth <= 768 && !isScrolling) {
+                requestAnimationFrame(() => centerTabInStrip(t));
               }
             } else {
               t.classList.remove('active');
